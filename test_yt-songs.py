@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from subprocess import check_output
 from tempfile import gettempdir
+from subprocess import check_output
 
 
 def test_free_songs():
