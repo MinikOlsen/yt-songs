@@ -69,9 +69,8 @@ def main():
     def count_status(download):
         if download['status'] == 'finished':
             count[0] += 1
-            count[1] += 1
         elif download['status'] == 'error':
-            count[1] += 1
+            pass
 
     def download_hook(response, **kwargs):
         soup = BeautifulSoup(response.text, 'html.parser')
