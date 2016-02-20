@@ -114,7 +114,7 @@ def main():
         for entry in listdir(temp):
             move(
                 path.join(temp, entry),
-                path.join(args.PATH, norm_title(entry))
+                path.join(path.expanduser(args.PATH), norm_title(entry))
             )
         print('Files moved and normalized successfully')
 
