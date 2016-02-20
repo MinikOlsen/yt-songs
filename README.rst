@@ -30,7 +30,7 @@ Create a songs file like test_songs_ and run:
 
 .. code:: bash
 
-        yt-songs SONGS_FILE FOLDER
+        yt-songs SONGS_FILE DST_FOLDER
 
 
 License
