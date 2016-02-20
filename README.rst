@@ -25,11 +25,6 @@ Install with pip:
 
         pip install yt-songs
 
-Requirements
-------------
-
-- Python >= 2.7 or >= 3.3
-
 Usage
 -------
 
@@ -41,6 +36,10 @@ Create a songs file like test_songs_ and run:
 
         yt-songs SONGS_FILE DST_FOLDER
 
+Requirements
+------------
+
+- Python >= 2.7 or >= 3.3
 
 License
 -------
