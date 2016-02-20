@@ -23,8 +23,8 @@ parser = argparse.ArgumentParser(
                  ' using youtube-dl.')
 )
 
-parser.add_argument('FILE')
-parser.add_argument('PATH')
+parser.add_argument('FILE', help='Songs file containing one title per line.')
+parser.add_argument('PATH', help='Destination folder.')
 parser.add_argument('-v', '--verbose', action='store_true',
                     help='Print youtube-dl output.')
 args = parser.parse_args()
