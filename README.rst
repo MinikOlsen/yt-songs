@@ -16,6 +16,15 @@ Features
 
 Life is the ultimate feature.
 
+Installation
+------------
+
+Install with pip:
+
+.. code:: bash
+
+        pip install yt-songs
+
 Requirements
 ------------
 
