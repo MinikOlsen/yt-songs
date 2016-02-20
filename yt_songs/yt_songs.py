@@ -14,7 +14,7 @@ import re
 
 config_path = path.join(
     path.dirname(path.abspath(__file__)),
-    'data/yt-songs.json'
+    'data', 'yt-songs.json'
 )
 
 parser = argparse.ArgumentParser(

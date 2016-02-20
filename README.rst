@@ -24,9 +24,13 @@ Requirements
 Usage
 -------
 
+Create a songs file like test_songs_ and run:
+
+.. _test_songs: https://github.com/MinikOlsen/yt-songs/blob/master/test_songs
+
 .. code:: bash
 
-       yt-songs SONGS_FILE FOLDER
+        yt-songs SONGS_FILE FOLDER
 
 
 License
