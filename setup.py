@@ -37,7 +37,7 @@ setup(
     install_requires=[
         'youtube-dl',
         'beautifulsoup4',
-        'gevent>1.0.2',
+        'gevent==1.1b6',
         'grequests'],
     dependency_links=['https://github.com/rg3/youtube-dl/'],
     classifiers=[
