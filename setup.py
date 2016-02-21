@@ -38,7 +38,9 @@ setup(
         'youtube-dl',
         'beautifulsoup4',
         'gevent==1.1b6',
-        'grequests'],
+        'grequests',
+        'yaml'
+        ],
     dependency_links=['https://github.com/rg3/youtube-dl/'],
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
