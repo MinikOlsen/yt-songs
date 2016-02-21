@@ -3,6 +3,12 @@
 # C extensions
 *.so
 
+# Todo file
+TODO.rst
+
+# Cache folder
+.cache
+
 # Packages
 *.egg
 *.egg-info

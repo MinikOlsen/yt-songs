@@ -6,7 +6,7 @@ from subprocess import check_output
 
 def test_free_songs():
     '''Tries to download a list of free songs'''
-    result = run_cmd('yt-songs test_songs ' + gettempdir())
+    result = run_cmd('yt-songs get test_songs ' + gettempdir())
     assert 'successfully' in result
 
 

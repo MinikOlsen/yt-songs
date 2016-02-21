@@ -53,7 +53,7 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
     packages=['yt_songs'],
-    package_data={'yt_songs': ['data/yt-songs.json']},
+    package_data={'yt_songs': ['data/yt-songs.yaml']},
     entry_points={
         'console_scripts': [
             'yt-songs = yt_songs.yt_songs:main'
