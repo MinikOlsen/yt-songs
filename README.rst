@@ -32,6 +32,7 @@ Create a songs file like test_songs_ and run:
         yt-songs get SONGS_FILE DST_FOLDER
 
 Options:
+
 - **-v** or **--verbose** to print the full youtube-dl output.
 - **-s** or **--skip** to skip the normalization
 - **-n** NUMBER or **--number** NUMBER to download a search result other than the first
