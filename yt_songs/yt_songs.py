@@ -12,55 +12,14 @@ import argparse
 import yaml
 import time
 import re
-
 try:
     from urllib.parse import unquote
 except ImportError:
     from urlparse import unquote
 
-parser = argparse.ArgumentParser(
-    description=('YT-Songs searches, downloads and normalizes'
-                 ' the titles of a list of songs from youtube'
-                 ' using youtube-dl.')
-)
-
-subparsers = parser.add_subparsers(dest='mode')
-
-config_parser = subparsers.add_parser('config')
-config_parser.add_argument('-e', '--edit', action='store_true',
-                           help='Edit config file.')
-
-main_parser = subparsers.add_parser('get')
-main_parser.add_argument('FILE',
-                         help='Songs file containing one title per line.')
-main_parser.add_argument('PATH', help='Destination folder.')
-main_parser.add_argument('-n', '--number', metavar='N',
-                         nargs='?', default=1, type=int,
-                         help='Number of the search result to download.')
-main_parser.add_argument('-s', '--skip', action='store_true',
-                         help='Skip normalization.')
-main_parser.add_argument('-v', '--verbose', action='store_true',
-                         help='Print youtube-dl output.')
-args = parser.parse_args()
-
-
-class Logger:
-    def __init__(self, caller_self):
-        self.caller_self = caller_self
-
-    def debug(self, msg):
-        if args.verbose:
-            print(msg)
-
-    def warning(self, msg):
-        self.caller_self.errors.append(msg)
-
-    def error(self, msg):
-        self.caller_self.errors.append(msg)
-
 
 class YTSongs:
-    def __init__(self, config_path):
+    def __init__(self, config_path, logger):
         self.count = [0, 0]
         self.errors = []
         self.yt_links = []
@@ -73,7 +32,7 @@ class YTSongs:
             self.replaces = config['replacements']
 
             self.ydl_opts = config['ydl_opts']
-            self.ydl_opts['logger'] = Logger(self)
+            self.ydl_opts['logger'] = logger(self)
             self.ydl_opts['outtmpl'] = path.join(self.temp, self.name)
             self.ydl_opts['progress_hooks'] = [self.__count_status]
 
@@ -164,6 +123,45 @@ config_path = path.join(
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description=('YT-Songs searches, downloads and normalizes'
+                     ' the titles of a list of songs from youtube'
+                     ' using youtube-dl.')
+    )
+
+    subparsers = parser.add_subparsers(dest='mode')
+
+    config_parser = subparsers.add_parser('config')
+    config_parser.add_argument('-e', '--edit', action='store_true',
+                               help='Edit config file.')
+
+    main_parser = subparsers.add_parser('get')
+    main_parser.add_argument('FILE',
+                             help='Songs file containing one title per line.')
+    main_parser.add_argument('PATH', help='Destination folder.')
+    main_parser.add_argument('-n', '--number', metavar='N',
+                             nargs='?', default=1, type=int,
+                             help='Number of the search result to download.')
+    main_parser.add_argument('-s', '--skip', action='store_true',
+                             help='Skip normalization.')
+    main_parser.add_argument('-v', '--verbose', action='store_true',
+                             help='Print youtube-dl output.')
+    args = parser.parse_args()
+
+    class Logger:
+        def __init__(self, caller_self):
+            self.caller_self = caller_self
+
+        def debug(self, msg):
+            if args.verbose:
+                print(msg)
+
+        def warning(self, msg):
+            self.caller_self.errors.append(msg)
+
+        def error(self, msg):
+            self.caller_self.errors.append(msg)
+
     if args.mode == 'config':
         call([environ.get('EDITOR', 'vim'), config_path])
     elif args.mode == 'get':
@@ -173,7 +171,7 @@ def main():
         songs_file = args.FILE
         dest = args.PATH
 
-        yts = YTSongs(config_path)
+        yts = YTSongs(config_path, Logger)
         yts.run(songs_file, dest,
                 number, skip)
         print('(' + str(round(time.time() - start_time)) + ' seconds)')
