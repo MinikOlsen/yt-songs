@@ -3,7 +3,6 @@
 
 from __future__ import unicode_literals, print_function
 from os import path, listdir, rmdir, environ
-from urllib.parse import unquote
 from bs4 import BeautifulSoup
 from subprocess import call
 from shutil import move
@@ -13,6 +12,11 @@ import argparse
 import yaml
 import time
 import re
+
+try:
+    from urllib.parse import unquote
+except ImportError:
+    from urlparse import unquote
 
 parser = argparse.ArgumentParser(
     description=('YT-Songs searches, downloads and normalizes'

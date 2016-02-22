@@ -63,6 +63,9 @@ temp_folder
 replacements
   The replacements to perform with regular expressions in order to normalize the titles.
 
+ydl_opts
+  Youtube-dl options.
+
 Requirements
 ------------
 
