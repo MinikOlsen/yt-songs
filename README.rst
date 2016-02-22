@@ -34,8 +34,8 @@ Create a songs file like test_songs_ and run:
 Options:
 
 - **-v** or **--verbose** to print the full youtube-dl output.
-- **-s** or **--skip** to skip the normalization
-- **-n** NUMBER or **--number** NUMBER to download a search result other than the first
+- **-s** or **--skip** to skip the normalization.
+- **-n** NUMBER or **--number** NUMBER to download a search result other than the first.
 
 Configuration
 -------------
