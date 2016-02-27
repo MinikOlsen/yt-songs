@@ -6,8 +6,9 @@ python:
   - "2.7"
 
 before_install:
-    - sudo apt-get install ffmpeg
-    - sudo apt-get install libavcodec-extra-53
+    - sudo add-apt-repository ppa:mc3man/trusty-media
+    - sudo apt-get update
+    - sudo apt-get install ffmpeg gstreamer0.10-ffmpeg
 
 install: pip install -U .
 script: py.test
