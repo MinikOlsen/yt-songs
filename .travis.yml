@@ -6,8 +6,8 @@ python:
   - "2.7"
 
 before_install:
-    - sudo apt-get install ffmpeg gstreamer0.10-ffmpeg
-    - ffprobe --help
+    - sudo apt-get install libav-tools
+    - avconv --help
 
 install: pip install -U .
 script: py.test
