@@ -7,7 +7,7 @@ python:
 
 before_install:
     - sudo apt-get install libav-tools
-    - avconv --help
+    - ffprobe -show_streams
 
 install: pip install -U .
 script: py.test
