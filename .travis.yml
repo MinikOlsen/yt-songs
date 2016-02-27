@@ -7,6 +7,7 @@ python:
 
 before_install:
     - sudo apt-get install libav-tools
+    - sudo apt-get install ubuntu-restricted-extras
 
 install: pip install -U .
 script: py.test
