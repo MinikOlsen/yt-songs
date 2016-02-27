@@ -36,6 +36,7 @@ Options:
 - **-v** or **--verbose** to print the full youtube-dl output.
 - **-s** or **--skip** to skip the normalization.
 - **-n** NUMBER or **--number** NUMBER to download a search result other than the first.
+- **-c** FILE or **--config** FILE to use a different  config file. It may be useful to have multiple config files for different needs.
 
 Configuration
 -------------

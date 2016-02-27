@@ -19,10 +19,15 @@ except ImportError:
 
 
 class YTSongs:
+    url_regex = ('(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/'
+                 '|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)'
+                 '([a-zA-Z0-9_-]{6,11})')
+
     def __init__(self, config_path, logger):
         self.count = [0, 0]
         self.errors = []
         self.yt_links = []
+        self.searches = []
 
         with open(config_path) as config_file:
             config = yaml.safe_load(config_file)
@@ -44,24 +49,6 @@ class YTSongs:
 
         return title
 
-    def download_hook(self, response, **kwargs):
-        soup = BeautifulSoup(response.text, 'html.parser')
-        links = soup.findAll("a", rel="spf-prefetch")
-
-        if not links:
-            name = re.search(r'search_query=([^&]+)', unquote(response.url))
-            print('Not found: "' + name.group(1) + '"')
-        else:
-            url = 'https://www.youtube.com' + links[self.res_index].get('href')
-            if url not in self.yt_links:
-                self.yt_links.append(url)
-                print('Calling youtube-dl: ' + url)
-
-                with youtube_dl.YoutubeDL(self.ydl_opts) as ydl:
-                    ydl.download([url])
-            else:
-                print('Ignored duplicate: ' + url)
-
     def normalize(self, perm):
         for tmp_title in listdir(self.temp):
             move(
@@ -75,17 +62,55 @@ class YTSongs:
         rmdir(self.temp)
         print('Files moved and normalized successfully')
 
+    def download(self, url):
+        if url not in self.yt_links:
+            self.yt_links.append(url)
+            print('Calling youtube-dl: ' + url)
+
+            with youtube_dl.YoutubeDL(self.ydl_opts) as ydl:
+                ydl.download([url])
+        else:
+            print('Ignored duplicate: ' + url)
+
+    def download_hook(self, response, **kwargs):
+        soup = BeautifulSoup(response.text, 'html.parser')
+        links = soup.findAll("a", rel="spf-prefetch")
+
+        if not links:
+            name = re.search(r'search_query=([^&]+)', unquote(response.url))
+            print('Not found: "' + name.group(1) + '"')
+        else:
+            self.download('https://www.youtube.com' +
+                          links[self.res_index].get('href'))
+
+    def search(self, title, hook):
+        print('Searching: "' + title + '"')
+        self.searches.append(
+            grequests.get(
+                'https://www.youtube.com/results?search_query=' +
+                title,
+                hooks={'response': hook}
+            )
+        )
+
+    def handle_line(self, line):
+        if not line.startswith('#') and line.strip():
+            line = line.rstrip('\n')
+            self.count[1] += 1
+
+            if re.search(self.url_regex, line):
+                self.download(line)
+            else:
+                self.search(line, self.download_hook)
+
     def run(self, songs_file, dest, res_index=0, skip_norm=False):
         self.res_index = res_index
         self.skip_norm = skip_norm
 
-        searches = (
-            self.search(title, self.download_hook)
-            for title in [line.rstrip('\n') for line in open(songs_file)
-                          if line.strip()]
-        )
+        for line in open(songs_file):
+            self.handle_line(line)
 
-        grequests.map(searches)
+        grequests.map(self.searches)
 
         if not self.count[0]:
             print('No songs downloaded')
@@ -98,15 +123,6 @@ class YTSongs:
         if self.errors:
             print('Unknown errors occurred in youtube-dl:')
             print('\n'.join(self.errors))
-
-    def search(self, title, hook):
-        self.count[1] += 1
-        print('Searching: "' + title + '"')
-        return grequests.get(
-                    'https://www.youtube.com/results?search_query=' +
-                    title,
-                    hooks={'response': hook}
-               )
 
     def __count_status(self, download):
         name = path.splitext(path.basename(download['filename']))[0]
@@ -142,6 +158,8 @@ def main():
     main_parser.add_argument('-n', '--number', metavar='N',
                              nargs='?', default=1, type=int,
                              help='Number of the search result to download.')
+    main_parser.add_argument('-c', '--config', metavar='CONFIG_FILE',
+                             help='Use a different config file.')
     main_parser.add_argument('-s', '--skip', action='store_true',
                              help='Skip normalization.')
     main_parser.add_argument('-v', '--verbose', action='store_true',
@@ -166,14 +184,11 @@ def main():
         call([environ.get('EDITOR', 'vim'), config_path])
     elif args.mode == 'get':
         start_time = time.time()
-        number = args.number - 1
-        skip = args.skip
-        songs_file = args.FILE
-        dest = args.PATH
 
-        yts = YTSongs(config_path, Logger)
-        yts.run(songs_file, dest,
-                number, skip)
+        chosen_config = args.config or config_path
+        yts = YTSongs(chosen_config, Logger)
+        yts.run(args.FILE, args.PATH, args.number - 1, args.skip)
+
         print('(' + str(round(time.time() - start_time)) + ' seconds)')
     else:
         parser.print_help()
