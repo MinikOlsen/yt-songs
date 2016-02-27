@@ -6,8 +6,8 @@ python:
   - "2.7"
 
 before_install:
-    - sudo apt-get install libav-tools
-    - sudo apt-get install ubuntu-restricted-extras
+    - sudo apt-get install ffmpeg
+    - sudo apt-get install libmp3lame0
 
 install: pip install -U .
 script: py.test
