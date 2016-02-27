@@ -7,7 +7,7 @@ python:
 
 before_install:
     - sudo apt-get install ffmpeg
-    - sudo apt-get install libmp3lame0
+    - sudo apt-get install libavcodec-extra-52 libavdevice-extra-52 libavfilter-extra-0 libavformat-extra-52 libavutil-extra-49 libpostproc-extra-51 libswscale-extra-0
 
 install: pip install -U .
 script: py.test
