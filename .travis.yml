@@ -5,5 +5,8 @@ python:
   - "3.3"
   - "2.7"
 
+before_install:
+    - sudo apt-get install ffmpeg
+
 install: pip install -U .
 script: py.test
