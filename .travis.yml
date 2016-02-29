@@ -8,7 +8,7 @@ python:
 sudo: required
 dist: trusty
 before_install:
-    - sudo apt-get install libav-tools
+    - sudo apt-get install libav-tools -y
 
 install: pip install -U .
 script: py.test
