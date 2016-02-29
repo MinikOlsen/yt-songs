@@ -70,10 +70,11 @@ ydl_opts
 Requirements
 ------------
 
-- FFmpeg_
+- FFmpeg_ or Libav_
 - Python >= 2.7 or >= 3.3
 
 .. _FFmpeg: http://ffmpeg.org/
+.. _Libav: https://libav.org/download/
 
 License
 -------

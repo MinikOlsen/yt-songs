@@ -5,9 +5,7 @@ python:
   - "3.3"
   - "2.7"
 
-before_install:
-    - sudo apt-get install libav-tools
-    - ffprobe -show_streams
-
+sudo: required
+dist: trusty
 install: pip install -U .
 script: py.test
