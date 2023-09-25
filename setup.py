@@ -37,7 +37,7 @@ setup(
     install_requires=[
         'youtube-dl',
         'beautifulsoup4',
-        'gevent==1.1b6',
+        'gevent==23.9.1',
         'grequests',
         'pyyaml'
     ],
